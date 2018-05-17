@@ -1,0 +1,13 @@
+windows命令行调用示例：
+
+多版本python共存 建议将python.exe 改名对应的版本号 如 python35.exe
+
+# --- 数据预处理命令 ---
+
+python35 data_prepare.py
+
+# -生产型命令
+
+# 模型训练
+python35 fenlei.py train
+
