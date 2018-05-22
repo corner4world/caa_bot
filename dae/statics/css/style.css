@@ -1,0 +1,32 @@
+@charset "utf-8";
+/* CSS Document */
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td{margin:0;padding:0;}
+body{color:#333;text-align:left;background:#fff;}
+body,button,input,select,textarea{font:12px/1.5 tahoma,arial,\5b8b\4f53;font-weight:400;}
+h1,h2,h3,h4,h5,h6{font-size:100%;}
+address,cite,dfn,em,var{font-style:normal;}
+ul,ol{list-style:none;}
+fieldset,img{border:0;}
+img {vertical-align:middle;}
+button,input,select,textarea{font-size:100%;}
+table{border-collapse:collapse;border-spacing:0;}
+a,a:visited {color:#333;text-decoration:none;outline:none;}
+a:hover,a:active,a:focus {text-decoration:underline;color:#62a315;background-color:transparent;}
+
+
+.search_box {float:left;width:523px;height:40px;background:#B8B8B8 url(/statics/img/bg.png) no-repeat -297px -415px;padding-left:3px;display:inline;}
+.search {width:529px;margin:0px;line-height:34px;height:34px;}
+.search a {text-decoration:none;cursor:pointer;}
+.search input {float:left;}
+.select {width:123px;border:0;line-height:22px;padding-left:1px;font-size:14px;}
+.select_hover {border-right:solid 2px #B8B8B8;}
+.part {left:-3px;top:34px;width:180px;padding:4px 1px 1px;background:#fff url(/statics/img/select_topbg.png) no-repeat left top;border:solid 3px #B8B8B8;border-top:0;line-height:30px;position:absolute;z-index: 9999;height:auto;zoom:1;-moz-border-radius:0px 0px 3px 3px;-webkit-border-radius:0px 0px 3px 3px;border-radius:0px 0px 3px 3px;}
+.part p {overflow:hidden;}
+.part p a {height:30px;color:#666;line-height:30px;padding-left:8px;width:82px;border-left:solid 1px #f3f3f3;border-top:solid 1px #f3f3f3;background:#fff;display:inline-block;float:left;margin-left:-1px;margin-top:-1px;white-space:nowrap;}
+.part a:hover {background:#f5f5f5;color:#62a315;}
+.enter {border:0;width:202px;height:34px;color:#999;line-height:34px;padding-left:5px;margin-top:3px;font-size:14px;outline:none;}
+.enters {border:0;width:202px;height:34px;color:#333;line-height:34px;padding-left:5px;margin-top:3px;font-size:14px;outline:none;position:relative;}
+.sug {border:0;position:absolute; left:180px;width:100px;color:#999;line-height:22px;padding-left:5px;margin-top:3px;font-size:14px;outline:none;}
+.sb {background:url(/statics/img/ask.gif);border:0;width:89px;height:37px;cursor:pointer;top:-5px;}
+.a {font-family: Verdana, Geneva, sans-serif;}
+.content{width:529px;margin:12px;float:center;}

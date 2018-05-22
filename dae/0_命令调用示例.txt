@@ -1,0 +1,52 @@
+本命令调用环境：windows 2008 r2 puthon 3.5版 
+注：为了与其它历史版本兼容，安装完python3,5后，
+在保证系统路径添加正常的情况下，改python.exe为
+python35.exe,调用命令也随之更改为：python35 xxx.py [参数]
+
+微服务启动命令：python35 web.py
+
+
+config.py #微服务主要参数配置文件
+
+views  #前台渲染模板文件夹
+statics   #静态文件夹
+diy #自定义的支持模块文件夹
+service #应用服务模块文件夹
+data #内部数据文件夹
+
+默认调用地址：http://127.0.0.1:8001
+
+python35 dae.py a=action:feature_diy_make,which:2,do1:1,do2:1,name_table:feature_train_txt,row_feature:8 #生成全监督自定义特征
+python35 dae.py a=action:csv_train_lr,which:2,name_table:feature_train_txt,name_table_2:feature_test_txt,row_feature:8,dim:2 #由数据库生成训练文件
+python35 dae.py a=action:train_lr,fit_rate:0.958,numb_step:32,dim:2,which:2,row_feature:8 #logistic回归训练模型
+
+python35 dae.py a=action:train_w2v #训练词向量
+
+#svm+lr意图识别
+python35 test_cf_svm_lr_whathow.py # 测试意图分类器
+python35 train_cf_svm_lr_whathow.py # 训练分类器模型
+
+#bilstm意图识别
+python35 test_bilstm.py # 测试意图分类器
+
+#cnn+bilstm意图识别
+python35 test_cnn_bilstm.py # 测试意图分类器
+python35 cnn_bilstm_init_pkl.py # 训练基础参数
+
+# 模型测试
+python35 test_cf.py a=action:model_all # 全部模型统计查准数
+python35 test_cf.py a=action:model_one,model:xxx # xxx 为模型名称 
+python35 test_cf.py a=action:precision_all # 全部模型计算查准
+
+# 知识图谱处理
+python35 dae.py a=action:vec_sm #近义词处理
+
+# 用户画像处理
+python35 dae.py a=action:ps_get #建立用户模型
+
+# 前台管理
+python35 dae.py a=action:class_js # 生成前台二级提交js码
+
+
+支持QQ群：4232051
+

@@ -1,0 +1,27 @@
+
+[redisconf]
+    host="192.168.100.251"
+    port=6379
+    db=0
+
+[ned_config]
+    rpc_address="192.168.100.253"
+    rpc_port=9190
+
+[threadpool_size]
+    size=5
+
+[python_config]
+    rpc_address="192.168.100.253"
+    rpc_port=9090
+
+[familia_thrift]
+    host="192.168.100.251"
+    port=12110
+
+[ltp_thrift]
+    host="192.168.100.251"
+    port=8100
+
+
+

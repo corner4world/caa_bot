@@ -1,0 +1,12 @@
+# 用于加速应用服务的缓存微服务
+
+先启动 __redis_start.bat
+再启动 python web.py #作为微服务 如果作为内嵌模块 import xx形式 则无需启动微服务 
+
+独立配置文件 为config.py
+
+#---具体命令行
+python dic_add.py a=action:kw_stop #停用词字典加载
+python dic_add.py a=action:kw_ne #命名实体词字典加载
+python dic_add.py a=action:api_key,numb_key:8 #生成并加载API验证码字典
+python dic_test.py #测试字典键值查找
