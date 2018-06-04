@@ -1,0 +1,17 @@
+#main {
+	font-size: 9pt;
+	padding: 12px;
+	width: 628px;
+}
+#TopWords {
+	width: 399px;
+}
+#main #content #TopWords p {
+	font-size: 12pt;
+}
+#main #content #TopWords p {
+	font-family: "Arial Unicode MS";
+}
+.title_main {
+	color: #F00;
+}

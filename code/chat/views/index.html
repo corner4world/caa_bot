@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{name_soft}} {{type_soft}} {{vol_soft}} {{authority_soft}}  QQ群:{{qq_group}} 手机:{{tel_ldae}} {{sys_time}}</title>
+<link rel="shortcut icon" href="{{ static_url("img/logo.ico") }}" />
+<script src="{{ static_url("js/jquery-1.8.2.min.js")}}"></script>
+<script src="{{ static_url("js/common.js")}}"></script>
+<link href="{{ static_url("css/style.css") }}" rel="stylesheet" type="text/css" />
+<script language="javascript" src="{{ static_url("search_tag/main_py.js")}}"></script>
+<style type="text/css">
+  .suggest_link 
+  {
+   background-color:#fff;
+   padding:2px 6px 2px 6px;
+  }
+  .suggest_link_over 
+  {
+    background:#EFEFEF;
+    padding:2px 6px 2px 6px;
+  }
+  #search_suggest
+  {
+    position:relative; 
+    left:115px; 
+    top:5px; 
+    background-color:#ffffff;
+    text-align:left;
+    border:0px solid #000000;
+    width:301px;
+   }
+</style> 
+</head>
+
+<body style="background-color:F6F6F6;">
+
+<center>
+<div style="background:url(statics/img/bj_groud.jpg);width:398px;height:666px;margin:10px auto;">
+<br />
+<p>&nbsp;</p>
+<p><br />
+  <br />
+  </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><br />
+</p>
+<p>
+<form name="search_form" onSubmit="return bottomForm(this);" target="_self" method="post" action="./api">
+<table width="388" border="0" align="center">
+  <tr>
+    <td height="43" align="center">
+    <center>
+    <font color="f6f6f6">问题：</font>
+    <br>
+    <div >
+    <div>
+    <input id="txtSearch" class="enter" name="q"  onfocus="if(this.value=='空格键确认输入分隔'){this.value='';}else{this.select();}this.style.color='black';"  value="空格键确认输入分隔" onkeydown="searchSuggest();" size="28" /> 
+    </div>
+    <div id="search_suggest" style="position:float;left:0px;top:-3px;width:207px;font-size:14px;" ></div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <input class="sb" name="Input" type="submit" value="" >
+    </center>
+      </td>
+      </tr>
+      <tr>
+    <td height="75" align="center" valign="middle">
+    <input name="action" type="hidden" value="chat">
+    
+    </td>
+  </tr>
+</table>
+</form>
+
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><font color="cccccc">1.主要参数在config.py配置 </font><br />
+  <br />
+<font color="cccccc">2.具体说明详见readme.txt </font><br />
+<br />
+<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=b66f609a13ecba9d012edab5963204488f83302f1711a4d551a030206046df14"><img border="0" src="/statics/img/QQ_ADD.png?v=f95c73d4b6365e9c1fd930b00620f5d2" alt="LDAE客服群" title="LDAE客服群" /><font color="#7e884f"> 4232051 </font> </a></p>
+</div>
+</center>
+
+</body>
+</html>

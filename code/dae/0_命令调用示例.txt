@@ -1,0 +1,32 @@
+本命令调用环境：windows 2008 r2 puthon 3.5版 
+注：为了与其它历史版本兼容，安装完python3,5后，
+在保证系统路径添加正常的情况下，改python.exe为
+python35.exe,调用命令也随之更改为：python35 xxx.py [参数]
+
+** 微服务启动命令：python35 web.py
+
+
+config.py #微服务主要参数配置文件
+
+views  #前台渲染模板文件夹
+statics   #静态文件夹
+diy #自定义的支持模块文件夹
+service #应用服务模块文件夹
+data #内部数据文件夹
+
+默认调用地址：http://127.0.0.1:8001
+
+#LR意图识别
+
+python35 dae.py a=action:lr_feature_make,which:2,do1:1,do2:1,name_model:x,row_feature:8 #生成全监督自定义特征 要求主数据数据表v1=0 v2=0 do1 特征值数值化 do2 特征值归一化 which 无量纲化的方法 1 min-max(极值)归一 2 Z-score(标准化)归一
+python35 dae.py a=action:lr_csv_train,which:2,name_model:x,row_feature:8,dim:2 #由数据库生成训练文件
+python35 dae.py a=action:train_lr,fit_rate:0.958,numb_step:32,dim:2,which:2,row_feature:8,name_model:x,rand_if:1 #logistic回归训练模型 rand_if 0 顺序 1 随机 3 指定 叠代次数
+
+
+# 前台管理
+python35 dae.py a=action:class_js # 生成前台二级提交js码
+
+
+** 重要 详细说明，请参见 readme.docx
+支持QQ群：4232051
+
