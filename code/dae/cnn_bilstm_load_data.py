@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+{
+
+"版权":"LDAE工作室",
+
+"author":{
+
+"1":"zhui",
+"2":"吉更",
+
+}
+
+"初创时间:"2017年3月",
+
+}
+"""
 import pickle
 import codecs
 import numpy as np
@@ -148,7 +164,10 @@ def get_sentence_arr(words_tags, word_voc, char_voc, tag_voc):
     """
     words, chars, postags = [], [], []
     for item in words_tags:
-        rindex = item.rindex('/')
+        try:
+            rindex = item.rindex('/')
+        except:
+            continue
         word = item[:rindex]
         words.append(word)
         tmp = []
@@ -167,7 +186,7 @@ def get_sentence_arr(words_tags, word_voc, char_voc, tag_voc):
     
     return sentence_arr, char_arr, postag_arr, len(words)
 
-def init_data(path, word_voc, char_voc, tag_voc, label_voc):
+def init_data(path, word_voc, char_voc, tag_voc, label_voc,run_if=0):
     """
     加载数据
     Args:
@@ -179,8 +198,15 @@ def init_data(path, word_voc, char_voc, tag_voc, label_voc):
         sentences: np.array
         etc.
     """
-    lines = read_lines(path)
-    data_count = len(lines)
+    
+    # 工程执行模式判别
+    if (run_if==1):
+        lines = path
+        data_count = 1
+    else:
+        lines = read_lines(path)
+        data_count = len(lines)
+        
     sentences = np.zeros((data_count, config.MAX_LEN), dtype='int32')
     tags = np.zeros((data_count, config.MAX_LEN), dtype='int32')
     sentence_actual_lengths = np.zeros((data_count,), dtype='int32')
@@ -201,10 +227,16 @@ def init_data(path, word_voc, char_voc, tag_voc, label_voc):
         instance_index += 1
     return sentences, chars, tags, labels
 
-if __name__ == '__main__':
+# 模块运行主程序
+def run_it():
+
     t0 = time()
     word_weights, char_weights, tag_weights = load_embedding()
     word_voc, char_voc, tag_voc, label_voc = load_voc()
     train_sentences, train_chars, train_tags, train_labels = init_data( config.TRAIN_PATH, word_voc, char_voc, tag_voc, label_voc)
     test_sentences, test_chars, test_tags, _ = init_data( config.TEST_PATH, word_voc, char_voc, tag_voc, label_voc)
     print('cnn_bilstm_load_data Done in %ds!' % (time()-t0))
+
+if __name__ == '__main__':
+
+    print("")

@@ -104,7 +104,7 @@ class BaseHandler(tornado.web.RequestHandler):
             #except BaseException as e:
                 #result = "数据分析内嵌式调用错误"
                 #print ("get_result异常信息：",e)
-                
+            #print (result,type(result)) # 调试用
         return result
 
 # 主页模块
@@ -214,7 +214,8 @@ class Api(BaseHandler):
         q,action,answer,page,id = self.arg_get()
             
         #print("问题:",q,"行为:",action,"答案：",answer,"分页:",page,"ID:",id,"加解密操作",secret_if) # 调试用
-
+        #txt =  json.dumps(self.get_result(q,action,answer,page,id),ensure_ascii=False)
+        
         try:
         
             txt =  json.dumps(self.get_result(q,action,answer,page,id),ensure_ascii=False)
@@ -281,25 +282,68 @@ class Show(BaseHandler):
         return txt
         
     # 是非型意图识别解释
-    def get_meaning_cnn_bilstm(self,meaning=6):
+    def get_meaning_cnn_bilstm(self,meaning=6,dim_p=5):
         
-        txt = "未知分型"
+        result = []
+        str_t = str(meaning)
+        str_t = str_t.strip()
+        i = 1
+        for x in str_t:
         
-        if (meaning == 0):
-            txt = "闲聊语"
-        if (meaning == 1):
-            txt = "常识"
-        if (meaning == 2):
-            txt = "诊断"
-        if (meaning == 3):
-            txt = "治疗"
-        if (meaning == 4):
-            txt = "生存期"
-        if (meaning == 5):
-            txt = "花费"
-        if (meaning == 6):
-            txt = "未知"
-        return txt
+            if (i == 1):
+                if (x == "0"):
+                    result.append("n/a")
+                if (x == "1"):
+                    result.append("实质型")
+                if (x == "2"):
+                    result.append("闲聊型")
+            if (i == 2):
+                if (x == "0"):
+                    result.append("n/a")
+                if (x == "1"):
+                    result.append("礼貌语")
+                if (x == "2"):
+                    result.append("情感的交流")
+                if (x == "3"):
+                    result.append("情感的关怀")
+            if (i == 3):
+                if (x == "0"):
+                    result.append("n/a")
+                if (x == "1"):
+                    result.append("是否型")
+                if (x == "2"):
+                    result.append("解答型")
+            if (i == 4):
+                if (x == "0"):
+                    result.append("n/a")
+                if (x == "1"):
+                    result.append("是什么")
+                if (x == "2"):
+                    result.append("为什么")
+                if (x == "3"):
+                    result.append("做什么")
+            if (i == 5):
+                if (x == "0"):
+                    result.append("n/a")
+                if (x == "1"):
+                    result.append("常识")
+                if (x == "2"):
+                    result.append("诊断")
+                if (x == "3"):
+                    result.append("治疗")
+                if (x == "4"):
+                    result.append("生存期")
+                if (x == "5"):
+                    result.append("花费")
+                if (x == "6"):
+                    result.append("其它医疗问题")
+                
+            if (i == dim_p):
+                break
+            else:
+                i += 1
+        
+        return str(result)
             
     # 是为型意图识别
     def get_meaning_whathow(self,meaning=6):

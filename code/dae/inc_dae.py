@@ -304,131 +304,6 @@ def run_it(**args):
                     i += 1
             
         return dic_t
-        
-        #rs_sqlite_file = Conn_sqlite3(config.path_main + config.dic_config["path_sqlite"],0) # 生成文件数据库实例
-        rs_way_mysql = Conn_mysql(config.dic_config["host_mysql"],config.dic_config["user_mysql"],config.dic_config["pwd_mysql"], "ldae_way_" + config.dic_config["name_mysql_after"], int(config.dic_config["port_mysql"])) # 生成MYSQL数据库way方法实例
-        rs_basedata_mysql = Conn_mysql(config.dic_config["host_mysql"],config.dic_config["user_mysql"],config.dic_config["pwd_mysql"], "ldae_basedata_" + config.dic_config["name_mysql_after"], int(config.dic_config["port_mysql"])) # 生成MYSQL数据库基础数据实例
-        #rs_index_mysql = Conn_mysql(config.dic_config["host_mysql"],config.dic_config["user_mysql"],config.dic_config["pwd_mysql"], "ldae_index_" + config.dic_config["name_mysql_after"], int(config.dic_config["port_mysql"])) # 生成MYSQL数据库索引数据实例
-        
-        if "table_td" in args:
-            table_td = args["table_td"]
-        else:
-            table_td="index_main"
-
-        list_s = []
-        dic_t = {}
-        td = 0
-        dic_p = {}
-        list_last = []
-        mk_is = 0 # 主题词判别变量
-        list_x = []
-        
-        dae_base = inc_ml.Dae_base()
-        segment = inc_nlp.Segment(txt_p=q_p,threshold_p=threshold,way_p="precise") #分词模块实例化
-        list_s = segment.seg_pseg() #含词性标注分词处理
-        newword_power_is = int(config.dic_config["newword_power_is"]) #新词识别的词频阈值
-        numn_word_self = len(list_s)
-        #return (inc_redis.kw_stop("高兴")) # 调试用 测试停用词查找缓存是否生效
-        
-        # 判别主题词主循环开始
-        for x in list_s:
-        
-            list_x = []
-            try:
-                list_x = eval(x)
-            except:
-                pass
-        
-            mk_if = 0
-            
-            #print (x,list_x,type(x)) # 调试用
-            
-            if (list_x):
-            
-                print ("词名：",list_x[0],"词性：",list_x[1]) # 调试用
-                #print ("停用词属性：",inc_redis.kw_stop(list_x[0])) # 调试用
-                
-                # 如果是名词类型
-                if ("n" in list_x[1]):
-                    if (inc_redis.kw_stop(list_x[0]) == ""):
-                        mk_if = 1
-                
-                # 如果是数词类型
-                if (list_x[1] == "m"):
-                    if (inc_redis.kw_stop(list_x[0]) == ""):
-                        mk_if = 1
-                
-                # 如果是动词类型
-                if (list_x[1] == "v"):
-                    mk_if = 1
-                
-                # 如果是未知待识别类型
-                if (list_x[1] == "x"):
-                    
-                    # 如果词性未知 先校验是否是成词
-                    sql = " select idf from " + table_td + " where keyword='" + list_x[0] + "'"
-                    #print (sql) # 调试用
-                    res, rows = rs_basedata_mysql.read_sql(sql)
-                    if (res > 0):
-                        mk_if = 1
-                        
-                    if (len(list_x[0]) <= 16):
-                    
-                        if (list_x[0] in dic_punctuation):
-                            
-                            pass
-                            
-                        else:
-                        
-                            id = 0
-                            sql = "select id,power from word_x where word ='" + list_x[0] + "'"
-                            #print (sql) # 调试用
-                            res, rows = rs_way_mysql.read_sql(sql)
-                            if (res > 0):
-                        
-                                if (rows[0][1] >= newword_power_is):
-                                    mk_if = 1 # 确认可以作为主题词
-                                    
-                                id = rows[0][0]
-                                sql = "update word_x set power = power + 1 where id=" + str(id)
-                                #print (sql) # 调试用
-                                update_if = rs_way_mysql.write_sql(sql)
-                                
-                                
-                            
-                            else:
-                        
-                                sql = "insert into word_x set word='" +  list_x[0] + "',power=1 "
-                                #print (sql) # 调试用
-                                insert_if = rs_way_mysql.write_sql(sql)
-                
-            if (mk_if == 1):
-            
-                if list_x[0] in dic_t:
-                
-                    dic_t[list_x[0]][0] = dic_t[list_x[0]][1] + 1
-                
-                else:
-                
-                    dic_t[list_x[0]] = [-999999.0,1,0,list_x[1]]
-
-                    sql = " select idf from " + table_td + " where keyword='" + list_x[0] + "'"
-                    #print (sql) # 调试用
-                    res, rows = rs_basedata_mysql.read_sql(sql)
-                    if (res > 0):
-                        dic_t[list_x[0]][2] = rows[0][0]
-                   
-        for x in dic_t:
-            if (dic_t[x][2] > 0):
-                dic_t[x][0] = round(dae_base.tf_idf(nump_tf_p=dic_t[x][1],numb_div_p=numn_word_self,numb_all_p=numb_q_all,numb_idf_p=dic_t[x][2]),10)
-                   
-        if (dic_t):
-            txt = str(dic_t)
-
-        rs_way_mysql.close() #关闭数据连接
-        rs_basedata_mysql.close() #关闭数据连接
-        
-        return txt
     
     # 获得原始知识图谱
     def get_kg():
@@ -737,10 +612,12 @@ def run_it(**args):
         
     # Cnn+Bilstm_领域知识_意图识别
     if (action_p == "cf_cnn_bilstm"):
-        print("740",q_p)
+        
+        segment = inc_nlp.Segment() #分词类实例化
         import inc_cnn_bilstm as cb # cnn_bilstm方法库引用
-        rate_t = int(cb.run_it(str_t=q_p))
+        rate_t = int(cb.run_it(str_t=q_p,action_p="",flag=1,segment_p=segment))
         dic_t = {"classify":rate_t}
+        
         return dic_t
         
     # 长时语义匹配
@@ -1605,14 +1482,14 @@ def run_it(**args):
         
     #主题词字典
     def dic_kw_get(q_p=""):
-    
-        dic_key = {}
-        try:
-            dic_key = eval(get_mk(q_p=q_p)) # 问题主题词字典
-        except:
-            pass
-            
-        return dic_key
+        
+        list_last = []
+        dic_t = {}
+        dic_t = dic_vec_segment(q_p=q_p,threshold_p=threshold,way_p="precise",action_p="pseg")
+        dic_t = get_mk(q_p=q_p,dic_t=dic_t)
+        for i in range(len(dic_t)):
+            list_last.append(dic_t[i+1]["name"])
+        return list_last
         
     # 主题词队列
     def list_kw_get(dic_key={}):
@@ -1677,7 +1554,7 @@ def run_it(**args):
         return dic_t
     
     # 用相似度法抽取答案主函数
-    def extract_answer_similar(content_p="",key_p=""):
+    def extract_answer_similar(content_p="",key_p="",step_is = "abstract"):
     
         import diy.inc_nlp as inc_nlp # 自然语言处理模块
         
@@ -1693,7 +1570,6 @@ def run_it(**args):
         list_last = [] # 最后的结果队列
         segment = inc_nlp.Segment()  # 分词对象实例化
         numb_tf = 0 # 主句中的tf分子
-        step_is = "abstract" #语义相似度匹配方法标定 默认是摘要法
         list_cos = []
         cos_t = 0.0 # 临时余弦值 
         
@@ -1830,7 +1706,8 @@ def run_it(**args):
                 else:
                     # 主题词法完全不匹配 进行实体法匹配 
                     step_is = "virtual"
-            
+        
+        #print (list_order,type(list_order)) # 调试用
         # 构造json码
         print ("最终生效步骤：",step_is)
         dic_last = {}
@@ -1838,11 +1715,13 @@ def run_it(**args):
         for x in list_order:
             dic_last[j] = [dic_sen_all[x[0]][0],x[1],dic_sen_all[x[0]][1],dic_sen_all[x[0]][2]]
             j += 1
+        #print (dic_last,type(dic_last)) # 调试用
         
         return dic_last
         
     # 相似度法抽取答案
     if (action_p == "answer_extract_similar"):
+    
         txt = extract_answer_similar(content_p=answer_p,key_p=q_p)
     
     # 整体返回文本型结果

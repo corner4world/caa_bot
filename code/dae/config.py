@@ -60,7 +60,7 @@ dic_config["path_sqlite"] = "\\data\\sqlite\\main_sqlite.db" #---主配置sqlite
 dic_config["host_mysql"] = "127.0.0.1" #---mysql数据库地址
 dic_config["user_mysql"] = "root" #---mysql管理员名
 dic_config["pwd_mysql"] = "test" #---mysql管理员密码
-dic_config["name_mysql_after"] = "caa_bot" #---mysql数据库名的后缀代号
+dic_config["name_mysql_after"] = "b" #---mysql数据库名的后缀代号
 dic_config["port_mysql"] = "3306" #---mysql数据库端口号
 dic_config["charset_mysql"] = "utf8" #---mysql数据库编码
 
@@ -82,8 +82,8 @@ dic_config["numb_find"] = "8" #---最大匹配关键词队列数
 dic_config["numb_limit"] = "10" #---匹配候选数
 
 # ---- 加密解密参数配置 ---
-dic_config["secret_key"] = "8wet34y^$" #---默认密钥
-dic_config["secret_salt"] = b'jdshgfonlsdgsd5e5perw09vos-%$&' #---默认密钥salt
+dic_config["secret_key"] = "8wety^$" #---默认密钥
+dic_config["secret_salt"] = b'jdshgfonlsdgperw09vos-%$&' #---默认密钥salt
 
 # ---- 数据分析引擎参数配置 ---
 dic_config["fit_rate"] = "0.95" #---默认拟合准确率

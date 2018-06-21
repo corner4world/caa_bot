@@ -33,8 +33,11 @@ from diy.inc_sys import * #自定义系统级功能模块
 path_main = config.dic_config["path_cnn_bilstm"] # 数据主路径
 
 # --- corpus ---
+TRAIN_CSV_PATH = config.dic_config["path_cnn_bilstm"] + 'corpus/train.csv'
+TEST_CSV_PATH = config.dic_config["path_cnn_bilstm"] + 'corpus/test.csv'
 TRAIN_PATH = config.dic_config["path_cnn_bilstm"] + 'corpus/training.seg.csv'
 TEST_PATH = config.dic_config["path_cnn_bilstm"] + 'corpus/testing.seg.csv'
+SENTENCE_PATH = config.dic_config["path_cnn_bilstm"] + 'corpus/sentence.txt'
 
 # --- voc ---
 VOC_ROOT = config.dic_config["path_cnn_bilstm"] + 'voc'
@@ -66,9 +69,14 @@ TAG_DIM = 64
 DIR_MODEL_ROOT = config.dic_config["path_cnn_bilstm"] + 'model'
 if not os.path.exists(DIR_MODEL_ROOT):
     os.mkdir(DIR_MODEL_ROOT)
+    
 DIR_MODEL = DIR_MODEL_ROOT + "/best_model_new_new_two"
 
 TRAIN_ALL_MODEL = DIR_MODEL_ROOT + "/all_data_model"
+
+# --- result ---
+TRAIN_RESULT_PATH = config.dic_config["path_cnn_bilstm"] + 'result'
+TRAIN_TEST_PATH = config.dic_config["path_cnn_bilstm"] + 'result/train_test.csv'
 
 # --- training param ---
 MAX_LEN = 95

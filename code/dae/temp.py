@@ -1,3 +1,25 @@
+    words = [] # 分词结果集
+    txt_t = ""
+    txt_t += "1," # 临时文本
+    segment = inc_seg.Segment() # 分词模块实例化
+    words = segment.seg_jieba(txt_p=str_t,way_p="pseg")# 获得分词结果
+    for w in words:  
+        #print (w.word, w.flag) # 调试用
+        txt_t += w.word + "/" + w.flag + "|"
+    txt_t = txt_t[0:-1]
+    
+    lines = [txt_t] # 待处理文本分词词性标注表达
+----------------
+    txt_t = ""
+    txt_t += "1," # 临时文本
+    
+    list_t = segment_p.seg_pseg(txt_p=str_t)
+    for x in list_t:
+        txt_t += w.word + "/" + w.flag + "|"
+    txt_t = txt_t[0:-1]
+    lines = [txt_t] # 待处理文本分词词性标注表达
+    print ("分词词性标注表达：",lines) # 调试用
+---------------
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-  
 

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 import pickle
 import codecs
 import numpy as np
 from collections import defaultdict
-import cnn_bilstm_config as config
+import cnn_bilstm_config as config_cb
 import os
+from time import time
 
 def read_lines(path):
     lines = []
@@ -56,20 +58,15 @@ def create_dictionary(token_dict, dic_path, start=0, sort=False,
     file = open(dic_path, 'wb')
     pickle.dump(voc, file)
     file.close()
+    
     return len(voc.keys())
 
-import pickle
-import codecs
-import numpy as np
-from collections import defaultdict
-import cnn_bilstm_config as config
-import os
 def init_voc():
     """
     初始化voc
     """
-    lines = read_lines(config.TRAIN_PATH)
-    lines += read_lines(config.TEST_PATH)
+    lines = read_lines(config_cb.TRAIN_PATH)
+    lines += read_lines(config_cb.TEST_PATH)
     words = []  # 句子
     pos_tags = []  # 词性标记类型
     sequence_length_dict = defaultdict(int)
@@ -77,18 +74,26 @@ def init_voc():
     char_dict = defaultdict(int)
     tags_dict = defaultdict(int)
     labels_dict = defaultdict(int)
+    
     for line in lines:
+    
         index = line.index(',')
         labels_dict[line[0:index]] += 1
         sentence = line[index+1:]
         # words and tags
         words_tags = sentence.split('|')
         sequence_length_dict[ len(words_tags) ] += 1
+        
         for item in words_tags:
-            r_index = item.rindex('/')
+            
+            try:
+                r_index = item.rindex('/')
+            except:
+                continue
             word, tag = item[:r_index], item[r_index+1:]
             words_dict[word] += 1
             tags_dict[tag] += 1
+            
             for w in word:
                 #if 's' in w:
                     #print(word)
@@ -96,23 +101,24 @@ def init_voc():
             
     # word voc
     word_size = create_dictionary(
-        words_dict, config.WORD_VOC_PATH, start=config.WORD_VOC_START,
+        words_dict, config_cb.WORD_VOC_PATH, start=config_cb.WORD_VOC_START,
         min_count=0, sort=True, lower=True, overwrite=True)
     
-    #char voc
+    # char voc
     char_size = create_dictionary(
-        char_dict, config.CHAR_VOC_PATH, start=config.CHAR_VOC_START,
+        char_dict, config_cb.CHAR_VOC_PATH, start=config_cb.CHAR_VOC_START,
         min_count=0, sort=True, lower=True, overwrite=True)
     
     # tag voc
     tag_size = create_dictionary(
-        tags_dict, config.TAG_VOC_PATH, start=config.TAG_VOC_START,
+        tags_dict, config_cb.TAG_VOC_PATH, start=config_cb.TAG_VOC_START,
         sort=True, lower=False, overwrite=True)
     
     # label voc
     #label_types = [str(i) for i in range(1, 7)]
     label_size = create_dictionary(
-        labels_dict, config.LABEL_VOC_PATH, start=0, overwrite=True)
+        labels_dict, config_cb.LABEL_VOC_PATH, start=0, overwrite=True)
+        
     print("word_size:", word_size)
     print("char_size:", char_size)
     print("tag_size:",  tag_size)
@@ -120,11 +126,11 @@ def init_voc():
     print('句子长度分布:')
     print(sorted(sequence_length_dict.items()))
     print('done!')
+    
     return char_dict
 
 
-
-##############################dump embedding #################################
+##############################dump embedding#################################
 
 def load_embed_from_txt(path):
     """
@@ -159,14 +165,14 @@ def init_word_embedding(path=None, overwrite=False):
     """
     if os.path.exists(path) and not overwrite:
         return
-    path_pre_train = './Data/embedding/word_embedding.txt'
+    path_pre_train = config_cb.EMBEDDING_ROOT + '/word_embedding.txt'
     if not os.path.exists(path_pre_train) :
         return
     
-    with open(config.WORD_VOC_PATH, 'rb') as file_r:
+    with open(config_cb.WORD_VOC_PATH, 'rb') as file_r:
         voc = pickle.load(file_r)
     embedding_dict, vec_dim = load_embed_from_txt(path_pre_train)
-    word_voc_size = len(voc.keys()) + config.WORD_VOC_START
+    word_voc_size = len(voc.keys()) + config_cb.WORD_VOC_START
     embedding_matrix = np.zeros((word_voc_size, vec_dim), dtype='float32')
     for item in voc:
         if item in embedding_dict:
@@ -186,14 +192,15 @@ def init_char_embedding(path=None, overwrite=False):
     """
     if os.path.exists(path) and not overwrite:
         return
-    path_pre_train = './Data/embedding/char_embedding.txt'
+    
+    path_pre_train = config_cb.EMBEDDING_ROOT  + "/char_embedding.txt"
     if not os.path.exists(path_pre_train) :
         return
     
-    with open(config.CHAR_VOC_PATH, 'rb') as file_r:
+    with open(config_cb.CHAR_VOC_PATH, 'rb') as file_r:
         voc = pickle.load(file_r)
     embedding_dict, vec_dim = load_embed_from_txt(path_pre_train)
-    char_voc_size = len(voc.keys()) + config.CHAR_VOC_START
+    char_voc_size = len(voc.keys()) + config_cb.CHAR_VOC_START
     embedding_matrix = np.zeros((char_voc_size, vec_dim), dtype='float32')
     for item in voc:
         if item in embedding_dict:
@@ -212,37 +219,38 @@ def init_tag_embedding(path, overwrite=False):
     """
     if os.path.exists(path) and not overwrite:
         return
-    with open(config.TAG_VOC_PATH, 'rb') as file:
+    with open(config_cb.TAG_VOC_PATH, 'rb') as file:
         tag_voc = pickle.load(file)
-    tag_voc_size = len(tag_voc.keys()) + config.TAG_VOC_START
+    tag_voc_size = len(tag_voc.keys()) + config_cb.TAG_VOC_START
     tag_weights = np.random.normal(
-        size=(tag_voc_size, config.TAG_DIM)).astype('float32')
-    for i in range(config.TAG_VOC_START):
+        size=(tag_voc_size, config_cb.TAG_DIM)).astype('float32')
+    for i in range(config_cb.TAG_VOC_START):
         tag_weights[i, :] = 0.
     with open(path, 'wb') as file:
         pickle.dump(tag_weights, file, protocol=2)
         
 def init_embedding():
     """
-    初始化embedding
+    初始化embedding嵌入层
     """
-    if not os.path.exists(config.EMBEDDING_ROOT):
-        os.mkdir(config.EMBEDDING_ROOT)
-    # 初始化word embedding
-    init_word_embedding(config.W2V_TRAIN_PATH, overwrite=True)
-    # 初始化char embedding
-    init_char_embedding(config.C2V_TRAIN_PATH, overwrite=True)
-    # 初始化tag embedding
-    init_tag_embedding(config.T2V_PATH, overwrite=True)
-
-from time import time
+    if not os.path.exists(config_cb.EMBEDDING_ROOT):
+        os.mkdir(config_cb.EMBEDDING_ROOT)
+        
+    # 初始化word_embedding
+    init_word_embedding(config_cb.W2V_TRAIN_PATH, overwrite=True)
+    
+    # 初始化char_embedding
+    init_char_embedding(config_cb.C2V_TRAIN_PATH, overwrite=True)
+    
+    # 初始化tag_embedding
+    init_tag_embedding(config_cb.T2V_PATH, overwrite=True)
 
 if __name__ == '__main__':
     
     t0 = time()
-    init_voc()
+    init_voc() # 初始化主模型数据
     print('init_voc Done in %.1fs!' % (time()-t0))
 
     t0 = time()
-    init_embedding()  # 初始化embedding
+    init_embedding()  # 初始化embedding嵌入层
     print('init_embedding Done in %.1fs!' % (time()-t0))

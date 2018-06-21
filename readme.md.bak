@@ -31,8 +31,6 @@ python3.5 windows2008
 
 # 调用
 
-
-
 1 数据分析引擎（dae）模块调用方法：
 
 1-1 确保进入code\cache目录 运行 __redis_start.bat

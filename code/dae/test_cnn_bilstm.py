@@ -34,7 +34,7 @@ import cgi # CGI模式 取得shell参数用
 import config #系统配置参数
 from diy.inc_sys import * #自定义系统级功能模块
 import inc_cnn_bilstm as cb # cnn_bilstm方法库引用
-
+import diy.inc_nlp as inc_nlp # 自然语言处理模块
 #--------- 外部模块处理<<结束>> ---------#
 
 #--------- 内部模块处理<<开始>> ---------#
@@ -43,18 +43,19 @@ def run_it(str_p=""):
 
     txt = ""
     result = []
-    
+    segment = inc_nlp.Segment() #分词类实例化
     numb_r = 999999
     # 循环输入
     i = 1
     while (i<=numb_r):
     
         key_p = input("请输入,exit退出 >>> ")
+        
         if (key_p == "exit"):
             break
         
         if (key_p):
-            result = int(cb.run_it(str_t=key_p))
+            result = int(cb.run_it(str_t=key_p,segment_p=segment))
         else:
             print ("输入不能为空")
             continue
@@ -62,21 +63,7 @@ def run_it(str_p=""):
         #print ("结果",result) # 调试用
         
         if (result):
-            if (result == 0):
-                print ("用户意图识别 >>> 引导")
-            if (result == 1):
-                print ("用户意图识别 >>> 诊断")
-            if (result == 2):
-                print ("用户意图识别 >>> 治疗")
-            if (result == 3):
-                print ("用户意图识别 >>> 知识")
-            if (result == 4):
-                print ("用户意图识别 >>> 预测")
-            if (result == 5):
-                print ("用户意图识别 >>> 费用")
-            if (result == 6):
-                print ("用户意图识别 >>> 其它")
-            #print (result) #调试用
+            print ("识别结果代码：",result) #调试用
         else:
             print("处理失败>>>",key_p)
     i += 1

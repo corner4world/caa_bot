@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+{
+
+"版权":"LDAE工作室",
+
+"author":{
+
+"1":"zhui",
+"2":"吉更",
+
+}
+
+"初创时间:"2017年3月",
+
+}
+"""
 from tqdm import tqdm
 import os
 from time import time
@@ -342,7 +358,7 @@ class DCModel(object):
             nb_test = int(len(data_sentences)/batch_size) + 1
         
         
-        for i in tqdm(range(nb_test)):
+        for i in range(nb_test):
             
             sentences_feed = data_sentences[i*batch_size:(i+1)*batch_size]
             tags_feed = data_tags[i*batch_size:(i+1)*batch_size]
